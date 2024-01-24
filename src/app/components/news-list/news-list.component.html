@@ -1,5 +1,8 @@
-<ng-container *ngIf="publications$$ | async">
-    @for (item of news; track item.title) {
-        <li>{{ item.title }}</li>
+@if (publications$$ | async) {
+    @if (news) {
+        <h1>Автомобильные новости</h1>
+        @for (item of news; track item.title) {
+            <li>{{ item.title }}</li>
+        } 
     }
-</ng-container>
+}
