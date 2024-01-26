@@ -1,0 +1,17 @@
+@import './variables';
+
+@function breakpoint-min($name, $breakpoints: $media) {
+    $min: map-get($breakpoints, $name);
+    @return if($min != 0, $min, null);
+}
+
+@mixin media-from($name, $breakpoints: $media) {
+    $min: breakpoint-min($name, $breakpoints);
+    @if $min {
+        @media (min-width: $min) {
+            @content;
+        }
+    } @else {
+        @content;
+    }
+}

@@ -1,0 +1,50 @@
+@import './styles/typography';
+@import './styles/variables';
+
+:root {
+    --black-100: oklch(24% 0 none);
+    --black-80: oklch(41% 0 none);
+    --black-60: oklch(56% 0 none);
+    --black-40: oklch(71% 0 none);
+    --black-20: oklch(84% 0 none);
+    --black-10: oklch(91% 0 none);
+    --black-05: oklch(94% 0 none);
+    --white: oklch(100% 0 none);
+    --bg: oklch(.97 0 none);
+    --link: oklch(57% .16 269.23);
+    --link-hover: oklch(67% .16 269.23);
+    // --link-hover: oklch(from var(--link) calc(l / 2) c h);
+    --back-rgb: 0,0,0;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    color: var(--black-100);
+
+    &,
+    input,
+    textarea {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+a {
+    color: var(--link);
+
+    &:hover {
+        color: var(--link-hover);
+    }
+}
+
+h1 {
+    @extend %h1;
+}
+
+h2 {
+    @extend %h2;
+}
+
+h3 {
+    @extend %h3;
+}

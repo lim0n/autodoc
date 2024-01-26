@@ -1,0 +1,14 @@
+<div class="simple-modal__backdrop" (click)="close()"></div>
+<div class="simple-modal">
+    <div class="simple-modal__window">
+        <div class="simple-modal__header">
+            {{ title }}
+            <div class="simple-modal__close" (click)="close()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M37.071 21.515a1 1 0 0 1 1.414 1.414L22.93 38.485a1 1 0 0 1-1.414-1.414L37.07 21.515Z"/><path d="M21.515 22.929a1 1 0 0 1 1.414-1.414L38.485 37.07a1 1 0 0 1-1.414 1.414L21.515 22.93Z"/></svg>
+            </div>
+        </div>
+        <div class="simple-modal__content">
+            <ng-content></ng-content>
+        </div>
+    </div>
+</div>

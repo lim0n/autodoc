@@ -1,1 +1,6 @@
+<button (click)="openSimpleModal(modalTemplate)">open simple modal</button>
 <router-outlet />
+
+<ng-template #modalTemplate>
+    <div>This is custom modal</div>
+</ng-template>
