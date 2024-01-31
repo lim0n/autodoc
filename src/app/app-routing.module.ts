@@ -9,7 +9,10 @@ const routes: Routes = [
     pathMatch: 'full',
     component: NewsListComponent,
     resolve: { publications: NewsListResolver }
-  }
+  },
+  { path: 'errors/404', loadChildren: () => import('@pages/404/not-found-page.module').then(m => m.NotFoundPageModule) },
+  { path: 'errors/500', loadChildren: () => import('@pages/500/server-error-page.module').then(m => m.ServerErrorPageModule) },
+  { path: '**', redirectTo: '/errors/404', pathMatch: 'full' }
 ];
 
 @NgModule({

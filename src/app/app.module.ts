@@ -5,6 +5,7 @@ import { provideHttpClient, withFetch } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NewsListModule } from './components/news-list/news-list.module';
+import { AddArticleModule } from './components/add-article/add-article.module';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { NewsListModule } from './components/news-list/news-list.module';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    NewsListModule
+    NewsListModule,
+    AddArticleModule
   ],
   providers: [
     provideClientHydration(),

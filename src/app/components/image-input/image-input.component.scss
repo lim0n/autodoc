@@ -1,0 +1,9 @@
+.image-input {
+    position: relative;
+    
+    > input {
+        position: absolute;
+        opacity: 0;
+        pointer-events: none;
+    }
+}

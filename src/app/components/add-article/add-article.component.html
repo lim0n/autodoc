@@ -1,0 +1,7 @@
+<button (click)="clearFile()">Очистить инпут</button>
+
+<autodoc-image-input (fileSelected)="onFileChanged($event)" [events]="clearTrigger.asObservable()"></autodoc-image-input>
+
+@if (imageDataURL) {
+    <img [src]="imageDataURL" width="100%"/>
+}

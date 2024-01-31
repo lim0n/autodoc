@@ -10,10 +10,12 @@ import { SimpleModalService } from '@shared/services/simple-modal.service';
 export class AppComponent {
   title = 'autodoc_modules';
   
-  constructor(private modalService: SimpleModalService) {}
+  constructor(private _modalService: SimpleModalService) {}
 
-  openSimpleModal(modalTemplate: TemplateRef<any>) {
-    this.modalService
-      .open(modalTemplate, 'Добавить новость');
-  }
+  // openSimpleModal(modalTemplate: TemplateRef<any>) {
+  //   this._modalService
+  //     .open(modalTemplate, 'Добавить новость');
+  // }
+
+  
 }
