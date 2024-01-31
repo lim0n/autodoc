@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { BehaviorSubject, filter, map, pluck } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { IPublication } from '@shared/interfaces';
+import { PlatformService } from '@shared/services/platform.service';
 
 @Component({
   selector: 'autodoc-news-list',
@@ -13,14 +14,11 @@ export class NewsListComponent {
   news: IPublication[] | undefined;
   
   constructor (
-    private readonly _route: ActivatedRoute
+    private readonly _route: ActivatedRoute,
+    private readonly _platform: PlatformService
   ) {
     const { publications } = this._route.snapshot.data;
-    this.initSubsciptions();
-  }
-
-  initSubsciptions():void {
-
+    
     this._route.data
       .pipe(
         pluck('publications'),
@@ -32,6 +30,13 @@ export class NewsListComponent {
         map(value => value?.['news']))
       .subscribe(news =>
         this.news = news as unknown as IPublication[]);
+    
+    if (this._platform.isServer)  { return; }
+    this.initSubsciptions();
+  }
+
+  initSubsciptions():void {
+    
   }
 
 }
