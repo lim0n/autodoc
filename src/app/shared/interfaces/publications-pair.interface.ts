@@ -1,7 +1,7 @@
 import { IPublicationsResponse } from "./";
 
-export interface PublicationsPair {
-    length: 2;
-    0: number;
-    1: IPublicationsResponse[]
-  }
+export type PublicationsPair = {
+  length: 2;
+  0: string;
+  1: IPublicationsResponse
+}

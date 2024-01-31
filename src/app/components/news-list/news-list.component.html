@@ -1,7 +1,7 @@
-@if (publications$$ | async) {
-    @if (news) {
+@if (publications$ | async) {
+    @if (pubs) {
         <h1>Автомобильные новости</h1>
-        @for (item of news; track item.title) {
+        @for (item of pubs; track item.title) {
             <li>{{ item.title }}</li>
         } 
     }
