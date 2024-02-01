@@ -13,12 +13,14 @@ export interface PublicationsStateModel {
   pages: PublicationsPair[];
   flat: IPublication[];
   perPage: number;
+  pageLoaded: number;
 }
 
 const defaults = {
   pages: [],
   flat: [],
-  perPage: 10
+  perPage: 10,
+  pageLoaded: 0
 };
 
 @State<PublicationsStateModel>({
@@ -58,28 +60,38 @@ export class PublicationsState {
 
   @Action(PublicationsActions.Bootstrap)
   getFirstPage(ctx: StateContext<PublicationsStateModel>): void {
-    this._api.getNews()
-      .pipe(
-        take(1),
-        catchError(error => of(error)))
-      .subscribe(response => {
-        ctx.dispatch(new PublicationsActions.PushFromResponse({ ...response, offsetAndCount: '1/10' }));
-        ctx.dispatch(new PublicationsActions.FlattenPages());
-      });
+    const { pageLoaded } = ctx.getState();
+    ctx.patchState({ pageLoaded: pageLoaded + 1 });
+    ctx.dispatch(new PublicationsActions.GetPage(pageLoaded + 1) );
   }
 
   @Action(PublicationsActions.FlattenPages)
   setFlat(ctx: StateContext<PublicationsStateModel>): void {
-    const { pages } = ctx.getState();
-    let publications: IPublication[] = [];
+    const { pages, flat } = ctx.getState();
 
     pages.forEach((tuple) => {
       const resp = tuple[1];
       const pubs = resp.news;
-      pubs?.forEach((article) => publications.push(article));
+      pubs?.forEach((article) => flat.push(article));
     });
 
-    ctx.patchState({ flat: [ ...publications] });
+    ctx.patchState({ flat: [ ...flat] });
+  }
+
+  @Action(PublicationsActions.GetPage)
+  getPage(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.GetPage): void {
+    const pageNumber = payload;
+    const { perPage } = ctx.getState();
+    const offsetAndCount = `${pageNumber}/${perPage}`
+    this._api.getNews(pageNumber, perPage)
+      .pipe(
+        take(1),
+        catchError(error => of(error))
+      )
+      .subscribe(response => {
+        ctx.dispatch(new PublicationsActions.PushFromResponse({ ...response, offsetAndCount }));
+        ctx.dispatch(new PublicationsActions.FlattenPages());
+      })
   }
 }
 

@@ -19,5 +19,10 @@ export namespace PublicationsActions {
   export class FlattenPages {
     static readonly type = '[Publications] Convert pages: PublicationsPair[] to flat: IPublication[] '
   }
+
+  export class GetPage {
+    static readonly type = '[Publications] Get page';
+    constructor(public payload: number ) { }
+  }
   
 }

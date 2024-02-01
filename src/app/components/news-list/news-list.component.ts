@@ -38,6 +38,10 @@ export class NewsListComponent {
     this.initSubsciptions();
   }
 
+  getNextPage(): void {
+    this._store.dispatch([new PublicationsActions.Bootstrap]);
+  }
+
   initSubsciptions():void {
     
   }
