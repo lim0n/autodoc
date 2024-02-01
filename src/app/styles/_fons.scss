@@ -16,7 +16,7 @@ $font-weights: (
 
     @font-face {
         font-family: 'Inter';
-        src: url($fonts-url + '/Inter-' + $name) format('woff2');
+        src: url('/assets/fonts/Inter-' + $name) format('woff2');
         font-weight: $weight;
         font-display: fallback;
     }

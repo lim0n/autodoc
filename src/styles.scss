@@ -1,1 +1,75 @@
-/* You can add global styles to this file, and also import other style files */
+@import './app/styles/typography';
+@import './app/styles/variables';
+
+$font-weights: (
+    100: Thin,
+    200: ExtraLight,
+    300: Light,
+    400: Regular,
+    500: Medium,
+    600: SemiBold,
+    700: Bold,
+    800: ExtraBold,
+    900: Black
+);
+
+@each $weight, $name in $font-weights {
+
+    @font-face {
+        font-family: 'Inter';
+        src: url('/assets/fonts/Inter-' + $name + '.woff2') format('woff2');
+        font-weight: $weight;
+        font-display: fallback;
+    }
+}
+
+
+
+:root {
+    --black-100: oklch(24% 0 none);
+    --black-80: oklch(41% 0 none);
+    --black-60: oklch(56% 0 none);
+    --black-40: oklch(71% 0 none);
+    --black-20: oklch(84% 0 none);
+    --black-10: oklch(91% 0 none);
+    --black-05: oklch(94% 0 none);
+    --white: oklch(100% 0 none);
+    --bg: oklch(.97 0 none);
+    --link: oklch(57% .16 269.23);
+    --link-hover: oklch(67% .16 269.23);
+    // --link-hover: oklch(from var(--link) calc(l / 2) c h);
+    --back-rgb: 0,0,0;
+}
+
+body {
+    margin: 0;
+    box-sizing: border-box;
+    color: var(--black-100);
+}
+
+body,
+input,
+textarea,
+td {
+    font-family: 'Inter', sans-serif;
+}
+
+a {
+    color: var(--link);
+
+    &:hover {
+        color: var(--link-hover);
+    }
+}
+
+h1 {
+    @include h1();
+}
+
+h2 {
+    @extend %h2;
+}
+
+h3 {
+    @extend %h3;
+}

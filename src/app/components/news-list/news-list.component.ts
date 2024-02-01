@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, ViewEncapsulation } from '@angular/core';
+import { Observable, filter } from 'rxjs';
 import { ActivatedRoute } from '@angular/router';
 import { IPublication, PublicationsPair } from '@shared/interfaces';
 import { PlatformService } from '@shared/services/platform.service';
@@ -10,7 +10,9 @@ import { PublicationsState } from './state/publications.state';
 @Component({
   selector: 'autodoc-news-list',
   templateUrl: './news-list.component.html',
-  styleUrl: './news-list.component.scss'
+  styleUrl: './news-list.component.scss',
+  // host: { class: 'news-list' },
+  encapsulation: ViewEncapsulation.None
 })
 export class NewsListComponent {
   pubs: IPublication[] | undefined;
@@ -25,6 +27,9 @@ export class NewsListComponent {
     const { publications } = this._route.snapshot.data;
 
     this.publications$
+      .pipe(
+        filter(Boolean)
+      )
       .subscribe((value) => this.pubs = value );
 
     this._store.dispatch([new PublicationsActions.Bootstrap]);
