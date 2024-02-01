@@ -1,11 +1,7 @@
 @if (publications$ | async) {
     @if (pubs) {
-        <h1>Автомобильные новости</h1>
-
-        <div class="news-list">
-            @for (item of pubs; track item.title) {
-                <autodoc-news-item [data]="item"></autodoc-news-item>
-            } 
-        </div>
+        @for (item of pubs; track item.title) {
+            <autodoc-news-item [data]="item"></autodoc-news-item>
+        } 
     }
 }

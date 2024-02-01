@@ -11,7 +11,7 @@ import { PublicationsState } from './state/publications.state';
   selector: 'autodoc-news-list',
   templateUrl: './news-list.component.html',
   styleUrl: './news-list.component.scss',
-  // host: { class: 'news-list' },
+  host: { class: 'news-list' },
   encapsulation: ViewEncapsulation.None
 })
 export class NewsListComponent {

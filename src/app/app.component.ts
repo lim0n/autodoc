@@ -5,6 +5,7 @@ import { SimpleModalService } from '@shared/services/simple-modal.service';
   selector: 'autodoc-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
+  host: { class: 'app-component' },
   encapsulation: ViewEncapsulation.None
 })
 export class AppComponent {

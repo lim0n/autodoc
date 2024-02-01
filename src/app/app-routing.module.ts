@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { NewsListComponent } from './components/news-list/news-list.component';
-import { NewsListResolver } from '@shared/services/news-list.resolver';
 
 const routes: Routes = [
   {
     path: '',
-    pathMatch: 'full',
-    component: NewsListComponent,
-    resolve: { publications: NewsListResolver }
+    data: { title: 'Портал новостей'},
+    loadChildren: () => import('@routing/news/news-routing.module').then(m => m.NewsRoutingModule) 
   },
   { path: 'errors/404', loadChildren: () => import('@pages/404/not-found-page.module').then(m => m.NotFoundPageModule) },
   { path: 'errors/500', loadChildren: () => import('@pages/500/server-error-page.module').then(m => m.ServerErrorPageModule) },
