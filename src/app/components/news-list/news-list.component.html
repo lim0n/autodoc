@@ -1,7 +1,7 @@
 @if (publications$ | async) {
     @if (pubs) {
         @for (item of pubs; track item.title) {
-            <autodoc-news-item [data]="item"></autodoc-news-item>
+            <autodoc-news-item [data]="item" [routerLink]="'/news/'+item.url"></autodoc-news-item>
         } 
     }
     <button (click)="getNextPage()">Ещё</button>

@@ -17,4 +17,9 @@ export class PublicationsApiService {
     const url = new URL(`/api/news/${page}/${count}`, this.API);
     return this._http.get(String(url));
   }
+
+  getArticle(thread: string, item: string): Observable<IPublicationsResponse> {
+    const url = new URL(`/api/news/item/${thread}/${item}`, this.API);
+    return this._http.get(String(url));
+  }
 }

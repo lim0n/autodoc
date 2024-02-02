@@ -4,6 +4,7 @@ import { NewsListComponent } from './news-list.component';
 import { PublicationsStateModule } from './state/publications.state';
 import { NewsItemModule } from '../news-item/news-item.module';
 import { NgxsModule } from '@ngxs/store';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -13,7 +14,8 @@ import { NgxsModule } from '@ngxs/store';
     CommonModule,
     PublicationsStateModule,
     NewsItemModule,
-    NgxsModule
+    NgxsModule,
+    RouterModule
   ],
   exports: [NewsListComponent]
 })

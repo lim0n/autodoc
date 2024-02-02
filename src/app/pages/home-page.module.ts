@@ -4,10 +4,12 @@ import { HomePageComponent } from './home-page.component';
 import { RouterModule, Routes } from '@angular/router';
 import { NewsListModule } from '../components/news-list/news-list.module';
 
-const routes: Routes = [{
-  path: '',
-  component: HomePageComponent
-}];
+const routes: Routes = [
+  {
+    path: '',
+    component: HomePageComponent
+  }
+];
 
 @NgModule({
   declarations: [
