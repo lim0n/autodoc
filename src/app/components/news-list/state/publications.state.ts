@@ -14,13 +14,15 @@ export interface PublicationsStateModel {
   flat: IPublication[];
   perPage: number;
   pageLoaded: number;
+  pageRequested: number;
 }
 
 const defaults = {
   pages: [],
   flat: [],
   perPage: 10,
-  pageLoaded: 0
+  pageLoaded: 0,
+  pageRequested: 0
 };
 
 @State<PublicationsStateModel>({
@@ -44,6 +46,11 @@ export class PublicationsState {
     return state.flat
   }
 
+  @Selector()
+  static pageLoaded$(state: PublicationsStateModel): number {
+    return state.pageLoaded
+  }
+
   @Action(PublicationsActions.AddChunk)
   addChunk(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.AddChunk): void {
     const { pages } = ctx.getState();
@@ -56,13 +63,6 @@ export class PublicationsState {
     const { offsetAndCount } = payload;
     const publicationsPairModel = { pages, ...mapNetResponseToPublicationsPair(payload, offsetAndCount as string) };
     ctx.patchState({ pages: [ publicationsPairModel ]})
-  }
-
-  @Action(PublicationsActions.Bootstrap)
-  getFirstPage(ctx: StateContext<PublicationsStateModel>): void {
-    const { pageLoaded } = ctx.getState();
-    ctx.patchState({ pageLoaded: pageLoaded + 1 });
-    ctx.dispatch(new PublicationsActions.GetPage(pageLoaded + 1) );
   }
 
   @Action(PublicationsActions.FlattenPages)
@@ -80,18 +80,30 @@ export class PublicationsState {
 
   @Action(PublicationsActions.GetPage)
   getPage(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.GetPage): void {
-    const pageNumber = payload;
-    const { perPage } = ctx.getState();
-    const offsetAndCount = `${pageNumber}/${perPage}`
-    this._api.getNews(pageNumber, perPage)
+    const { perPage, pageLoaded } = ctx.getState();
+    const pageRequested = payload;
+    const offsetAndCount = `${pageRequested}/${perPage}`
+    this._api.getNews(pageRequested, perPage)
       .pipe(
         take(1),
         catchError(error => of(error))
       )
       .subscribe(response => {
+        ctx.patchState({ pageLoaded: pageRequested });
         ctx.dispatch(new PublicationsActions.PushFromResponse({ ...response, offsetAndCount }));
         ctx.dispatch(new PublicationsActions.FlattenPages());
       })
+  }
+
+  @Action(PublicationsActions.GetNextPage)
+  getNextPage(ctx: StateContext<PublicationsStateModel>): void {
+    const { pageLoaded, pageRequested } = ctx.getState();
+    // Todo: проработать наполнение экрана
+    if ( pageLoaded !== pageRequested && pageLoaded > 1 ) { 
+      return; 
+    }
+    ctx.patchState({ pageRequested: pageRequested + 1 });
+    ctx.dispatch(new PublicationsActions.GetPage(pageRequested + 1) );
   }
 }
 

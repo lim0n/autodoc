@@ -4,5 +4,5 @@
             <autodoc-news-item [data]="item" [routerLink]="'/news/'+item.url"></autodoc-news-item>
         } 
     }
-    <button (click)="getNextPage()">Ещё</button>
 }
+<button (click)="getNextPage()" #anchor>Ещё</button>

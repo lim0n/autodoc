@@ -9,7 +9,10 @@ const routes: Routes = [
     children: [
       {
         path: '',
-        pathMatch: 'full',
+        loadChildren: () => import('@pages/home-page.module').then(m => m.HomePageModule)
+      },
+      {
+        path: 'news',
         loadChildren: () => import('@pages/home-page.module').then(m => m.HomePageModule)
       },
       {

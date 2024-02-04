@@ -1,7 +1,6 @@
-import { Component, ViewEncapsulation } from '@angular/core';
-import { Observable, filter } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
-import { IPublication, PublicationsPair } from '@shared/interfaces';
+import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
+import { Observable, Subject, filter, take, takeUntil } from 'rxjs';
+import { IPublication } from '@shared/interfaces';
 import { PlatformService } from '@shared/services/platform.service';
 import { Store, Select } from '@ngxs/store'
 import { PublicationsActions } from './state/publications.actions';
@@ -15,35 +14,65 @@ import { PublicationsState } from './state/publications.state';
   encapsulation: ViewEncapsulation.None
 })
 export class NewsListComponent {
-  pubs: IPublication[] | undefined;
-
+  private destroyed: Subject<boolean> = new Subject<boolean>();
+  private observer!: IntersectionObserver;
   @Select(PublicationsState.publications$) publications$!: Observable<IPublication[]>;
+  @Select(PublicationsState.pageLoaded$) pageLoaded$!: Observable<number>;
+  @ViewChild('anchor') anchor!: ElementRef;
+  pubs: IPublication[] | undefined;
   
   constructor (
-    private readonly _route: ActivatedRoute,
     private readonly _platform: PlatformService,
-    private readonly _store: Store
+    private readonly _store: Store,
+    private _elementRef: ElementRef
   ) {
-    const { publications } = this._route.snapshot.data;
-
     this.publications$
       .pipe(
-        filter(Boolean)
+        filter(Boolean),
+        takeUntil(this.destroyed)
       )
       .subscribe((value) => this.pubs = value );
 
-    this._store.dispatch([new PublicationsActions.Bootstrap]);
-    
+    if ( !this.pubs?.length ) {
+      this._store.dispatch([new PublicationsActions.GetNextPage]);
+    }
+  }
+  
+  ngAfterViewInit(): void {
     if (this._platform.isServer)  { return; }
     this.initSubsciptions();
   }
 
-  getNextPage(): void {
-    this._store.dispatch([new PublicationsActions.Bootstrap]);
-  }
-
   initSubsciptions():void {
-    
+    this.pageLoaded$
+      .pipe(take(1))
+      .subscribe(()=> {this.initIntersectionObserver(this.anchor.nativeElement)})
   }
 
+  ngOnDestroy(): void {
+    this.destroyed.next(true);
+    this.destroyed.unsubscribe();
+    this.observer?.disconnect();
+  }
+
+  getNextPage(): void {
+    this._store.dispatch([new PublicationsActions.GetNextPage]);
+  }
+
+  initIntersectionObserver(element: HTMLElement): IntersectionObserver | void {
+    const options: IntersectionObserverInit = {
+      rootMargin: '-101% 0px 100% 0px'
+    };
+
+    const action: IntersectionObserverCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) {
+          this.getNextPage();
+        }
+      })
+    }
+
+    this.observer = new IntersectionObserver(action, options);
+    this.observer.observe(element);
+  }
 }
