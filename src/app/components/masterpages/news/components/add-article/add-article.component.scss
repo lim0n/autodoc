@@ -1,0 +1,76 @@
+@import '../../../../../styles/typography';
+@import '../../../../../styles/mixins';
+
+.add-article{
+    --close-side: 2rem;
+    --close-fill: var(--black-60);
+    --modal-padding: 1rem;
+    --modal-border-radius: 1rem;
+    --modal-window-inset: 1rem;
+    
+    @include media-from(md) {
+        --close-side: 5rem;
+        --close-fill: var(--white);
+        --modal-padding: 2.5rem 3.5rem;
+        --modal-border-radius: 2rem;
+        --modal-window-inset: calc( var(--close-side) + 1rem );
+    }
+
+    position: fixed;
+    inset: var(--modal-window-inset);
+    pointer-events: none;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    &__window {
+        flex-basis: clamp(100%, 39.5rem, 59.5rem);
+        padding: var(--modal-padding);
+        border-radius: var(--modal-border-radius);
+        background: var(--bg);
+        pointer-events: auto;
+        position: relative;
+    }
+
+    &__header {
+        @extend %h3;
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+        justify-content: space-between;
+
+        @include media-from(md) {
+            @include h2();
+        }
+    }
+
+    &__close {
+        width: var(--close-side);
+        height: var(--close-side);
+        flex-basis: var(--close-side);
+        border-radius: calc( var(--close-side) / 2 );
+        background: var(--black-05);
+        flex-shrink: 0;
+        cursor: pointer;
+
+        @include media-from(md) {
+            position: absolute;
+            top: 0;
+            right: calc( -1 * var(--close-side) );
+            background: transparent;
+        }
+
+        svg {
+            width: 100%;
+            height: 100%;
+            fill: var(--close-fill);
+        }
+    }
+
+    &__backdrop {
+        position: fixed;
+        inset: 0;
+        background: rgba(var(--back-rgb), .4);
+        pointer-events: auto;
+    }
+}

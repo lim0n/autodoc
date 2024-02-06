@@ -1,7 +1,24 @@
-<button (click)="clearFile()">Очистить инпут</button>
+<div class="add-article__backdrop" (click)="selfDestroy()"></div>
+<div class="add-article">
+    <div class="add-article__window">
+        <div class="add-article__header">
+            Добавить новость
+            <div class="add-article__close" (click)="selfDestroy()">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M37.071 21.515a1 1 0 0 1 1.414 1.414L22.93 38.485a1 1 0 0 1-1.414-1.414L37.07 21.515Z"/><path d="M21.515 22.929a1 1 0 0 1 1.414-1.414L38.485 37.07a1 1 0 0 1-1.414 1.414L21.515 22.93Z"/></svg>
+            </div>
+        </div>
+        <div class="add-article__content">
+            <button (click)="clearFile()">Очистить инпут</button>
 
-<autodoc-image-input (fileSelected)="onFileChanged($event)" [events]="clearTrigger.asObservable()"></autodoc-image-input>
+            <autodoc-image-input (fileSelected)="onFileChanged($event)" [events]="clearTrigger.asObservable()"></autodoc-image-input>
 
-@if (imageDataURL) {
-    <img [src]="imageDataURL" width="100%"/>
-}
+            @if (imageDataURL) {
+                <img [src]="imageDataURL" width="100%"/>
+            }
+        </div>
+    </div>
+</div>
+
+
+
+

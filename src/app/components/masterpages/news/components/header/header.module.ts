@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './header.component';
 import { AddArticleModule } from '../add-article/add-article.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
   declarations: [
@@ -9,7 +10,8 @@ import { AddArticleModule } from '../add-article/add-article.module';
   ],
   imports: [
     CommonModule,
-    AddArticleModule
+    AddArticleModule,
+    RouterModule
   ],
   exports: [HeaderComponent]
 })

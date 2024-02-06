@@ -17,7 +17,8 @@
 }
 
 @mixin make-container-basics() {
-    padding: var(--container-padding);
+    padding-right: var(--container-padding);
+    padding-left: var(--container-padding);
 
     @include media-from(md) {
         max-width: 960px;
