@@ -36,7 +36,10 @@ export class NewsListComponent {
       } );
 
     if ( !this.pubs?.length ) {
-      this._store.dispatch([new PublicationsActions.GetNextPage]);
+      this._store.dispatch([
+        new PublicationsActions.GetNextPage,
+        new PublicationsActions.GetLocalArticle
+      ]);
     }
   }
   

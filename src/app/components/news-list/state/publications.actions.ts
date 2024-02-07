@@ -29,4 +29,8 @@ export namespace PublicationsActions {
     static readonly type = '[Publications] Post article';
     constructor(public payload: Partial<IPublication>) { }
   }
+
+  export class GetLocalArticle {
+    static readonly type = '[Publications] Get local article';
+  }
 }

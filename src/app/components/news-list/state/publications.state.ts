@@ -7,7 +7,7 @@ import {
 } from '@shared/interfaces';
 import { PublicationsApiService } from '@shared/services/publications-api.service';
 import { mapNetResponseToPublicationsPair } from '@shared/utils/map-net-response-to-publications-pair.function'
-import { catchError, of, take, tap } from 'rxjs';
+import { catchError, filter, of, take, tap } from 'rxjs';
 
 export interface PublicationsStateModel {
   pages: PublicationsPair[];
@@ -114,6 +114,22 @@ export class PublicationsState {
     this._api.postArticle(payload)
       .pipe(
         take(1),
+        catchError(error => of(error))
+      ).subscribe(pair => {
+        ctx.dispatch([
+          new PublicationsActions.AddChunk(pair),
+          new PublicationsActions.FlattenPages
+        ]);
+      })
+  }
+
+  @Action(PublicationsActions.GetLocalArticle)
+  getLocalArticle(ctx: StateContext<PublicationsStateModel>): void {
+    const { pages } = ctx.getState();
+    this._api.getLocalArticle()
+      .pipe(
+        take(1),
+        filter(Boolean),
         catchError(error => of(error))
       ).subscribe(pair => {
         ctx.dispatch([

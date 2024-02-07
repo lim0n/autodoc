@@ -41,9 +41,12 @@ export class PublicationsApiService {
   }
 
   postArticle(publication: IPublication): Observable<PublicationsPair> {
-    // console.warn('api postArticle');
     this.localNews[1].news?.push(publication);
     this.localNews$$.next(this.localNews);
+    return this.localNews$$;
+  }
+
+  getLocalArticle(): Observable<PublicationsPair> {
     return this.localNews$$;
   }
 }
