@@ -14,6 +14,8 @@ import { IPublication } from '@shared/interfaces';
   encapsulation: ViewEncapsulation.None
 })
 export class AddArticleComponent {
+  title = 'Добавить новость';
+  step: 'form' | 'result' = 'form';
   @Output() closeDialog: EventEmitter<void> = new EventEmitter();
   clearTrigger = new Subject<void>();
   imageDataURL = '';
@@ -68,6 +70,8 @@ export class AddArticleComponent {
 
   postArticle(): void {
     this._store.dispatch(new PublicationsActions.PostArticle(this.addArticleModel()));
+    this.title = 'Готово';
+    this.step = 'result';
   }
 
   addArticleModel(): Partial<IPublication> {

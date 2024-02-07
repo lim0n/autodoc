@@ -50,3 +50,11 @@
     font-size: 1.5rem;
     font-weight: 700;
 }
+
+@mixin text2() {
+    font-size: 1.25rem;
+
+    @include media-from(md) {
+        font-size: 1.5rem;
+    }
+}

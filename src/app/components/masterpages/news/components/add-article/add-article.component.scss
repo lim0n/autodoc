@@ -89,6 +89,31 @@
         }
     }
 
+    &-result {
+        display: grid;
+        gap: 1rem;
+        grid-auto-flow: row;
+
+        @include media-from(md) {
+            grid-template-columns: 210px 1fr;
+            grid-template-rows: auto auto;
+        }
+
+        img {
+            width: 100%;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        div {
+            @include text2();
+        }
+
+        button {
+            grid-column: 1 / span 2;
+        }
+    }
+
     &__image {
         position: relative;
         justify-self: start;
