@@ -54,27 +54,29 @@ export class PublicationsState {
   @Action(PublicationsActions.AddChunk)
   addChunk(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.AddChunk): void {
     const { pages } = ctx.getState();
-    ctx.patchState({ pages: [ ...pages, payload ] });
+    pages.unshift(payload);
+    ctx.patchState({ pages });
   }
 
   @Action(PublicationsActions.PushFromResponse)
   pushFromResponse(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.PushFromResponse): void {
     const { pages } = ctx.getState();
     const { offsetAndCount } = payload;
-    const publicationsPairModel = { pages, ...mapNetResponseToPublicationsPair(payload, offsetAndCount as string) };
-    ctx.patchState({ pages: [ publicationsPairModel ]})
+    const pushval = mapNetResponseToPublicationsPair(payload, offsetAndCount as string);
+    ctx.patchState({ pages: [...pages, pushval] })
   }
 
   @Action(PublicationsActions.FlattenPages)
   setFlat(ctx: StateContext<PublicationsStateModel>): void {
-    const { pages, flat } = ctx.getState();
-
+    const { pages } = ctx.getState();
+    const flat: IPublication[] = [];
     pages.forEach((tuple) => {
       const resp = tuple[1];
       const pubs = resp.news;
-      pubs?.forEach((article) => flat.push(article));
+      pubs?.forEach((article) => {
+        flat.push(article);
+      });
     });
-
     ctx.patchState({ flat: [ ...flat] });
   }
 
@@ -104,6 +106,21 @@ export class PublicationsState {
     }
     ctx.patchState({ pageRequested: pageRequested + 1 });
     ctx.dispatch(new PublicationsActions.GetPage(pageRequested + 1) );
+  }
+
+  @Action(PublicationsActions.PostArticle)
+  postArticle(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.PostArticle): void {
+    const { pages } = ctx.getState();
+    this._api.postArticle(payload)
+      .pipe(
+        take(1),
+        catchError(error => of(error))
+      ).subscribe(pair => {
+        ctx.dispatch([
+          new PublicationsActions.AddChunk(pair),
+          new PublicationsActions.FlattenPages
+        ]);
+      })
   }
 }
 

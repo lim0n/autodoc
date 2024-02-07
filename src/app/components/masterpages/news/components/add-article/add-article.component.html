@@ -7,18 +7,19 @@
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 60 60"><path d="M37.071 21.515a1 1 0 0 1 1.414 1.414L22.93 38.485a1 1 0 0 1-1.414-1.414L37.07 21.515Z"/><path d="M21.515 22.929a1 1 0 0 1 1.414-1.414L38.485 37.07a1 1 0 0 1-1.414 1.414L21.515 22.93Z"/></svg>
             </div>
         </div>
-        <div class="add-article__content">
-            <button (click)="clearFile()">Очистить инпут</button>
-
+        <div class="add-article__content" [formGroup]="addArticleForm">
+            <input type="text" formControlName="title">
+            <textarea rows="5" formControlName="text"></textarea>
             <autodoc-image-input (fileSelected)="onFileChanged($event)" [events]="clearTrigger.asObservable()"></autodoc-image-input>
-
             @if (imageDataURL) {
-                <img [src]="imageDataURL" width="100%"/>
+                <div class="add-article__image">
+                    <button type="button" (click)="clearFile()">
+                        <svg viewBox="0 0 12 12"><path d="M10.55.47a.65.65 0 1 1 .92.92L1.4 11.47a.65.65 0 0 1-.92-.92L10.55.47Z M.47 1.39A.65.65 0 0 1 1.4.47l10.08 10.08a.65.65 0 1 1-.92.92L.47 1.39Z"/></svg>
+                    </button>
+                    <img [src]="imageDataURL"/>
+                </div>
             }
+            <button class="btn btn-primary" type="button" [disabled]="!addArticleForm.valid" (click)="postArticle()">Опубликовать новость</button>
         </div>
     </div>
 </div>
-
-
-
-

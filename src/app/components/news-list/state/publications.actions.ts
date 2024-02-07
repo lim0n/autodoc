@@ -1,9 +1,9 @@
-import { IPublicationsResponse, PublicationsPair } from "@shared/interfaces";
+import { IPublication, IPublicationsResponse, PublicationsPair } from "@shared/interfaces";
 
 export namespace PublicationsActions {
 
   export class AddChunk {
-    static readonly type = '[Publications] Add item';
+    static readonly type = '[Publications] Add chunk';
     constructor(public payload: PublicationsPair) { }
   }
 
@@ -23,5 +23,10 @@ export namespace PublicationsActions {
 
   export class GetNextPage {
     static readonly type = '[Publications] Get next page';
+  }
+
+  export class PostArticle {
+    static readonly type = '[Publications] Post article';
+    constructor(public payload: Partial<IPublication>) { }
   }
 }

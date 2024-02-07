@@ -7,6 +7,7 @@
     --modal-padding: 1rem;
     --modal-border-radius: 1rem;
     --modal-window-inset: 1rem;
+    --modal-window-width: 100%;
     
     @include media-from(md) {
         --close-side: 5rem;
@@ -14,22 +15,32 @@
         --modal-padding: 2.5rem 3.5rem;
         --modal-border-radius: 2rem;
         --modal-window-inset: calc( var(--close-side) + 1rem );
+        --modal-window-width: 39.5rem;
+    }
+
+    @include media-from(xl) {
+        --modal-window-width: 59.5rem;
     }
 
     position: fixed;
     inset: var(--modal-window-inset);
     pointer-events: none;
     display: flex;
-    align-items: flex-start;
-    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
 
     &__window {
-        flex-basis: clamp(100%, 39.5rem, 59.5rem);
+        width: var(--modal-window-width);
+        max-width: 100%;
         padding: var(--modal-padding);
         border-radius: var(--modal-border-radius);
         background: var(--bg);
         pointer-events: auto;
         position: relative;
+        display: grid;
+        grid-auto-flow: row;
+        gap: 2rem;
     }
 
     &__header {
@@ -67,10 +78,107 @@
         }
     }
 
+    &__content {
+        display: grid;
+        gap: 1rem;
+        grid-auto-flow: row;
+        padding-bottom: 1rem;
+
+        @include media-from(md) {
+            gap: 1.5rem;
+        }
+    }
+
+    &__image {
+        position: relative;
+        justify-self: start;
+        position: relative;
+
+        img {
+            width: 200px;
+            aspect-ratio: 210/107;
+            object-fit: cover;
+            border-radius: 1rem;
+        }
+
+        button {
+            background: var(--black-100);
+            width: 2rem;
+            height: 2rem;
+            border: none;
+            padding: .5rem;
+            border-radius: 1rem;
+            position: absolute;
+            right: -.5rem;
+            top: -.5rem;
+
+            svg {
+                width: 100%;
+                height: 100%;
+                fill: var(--white);
+            }
+        }
+    }
+
     &__backdrop {
         position: fixed;
         inset: 0;
         background: rgba(var(--back-rgb), .4);
         pointer-events: auto;
+    }
+
+    .btn {
+        background: transparent;
+        border: 1px solid transparent;
+        padding: 1rem 1.5rem;
+        border-radius: 2rem;
+        @extend %text3;
+
+        &-regular {
+            border-style: dashed;
+            border-color: var(--link);
+            color: var(--link);
+        }
+
+        &-primary {
+            background: var(--black-100);
+            color: var(--white);
+        }
+
+        &[disabled] {
+            background: var(--black-10);
+            color: var(--black-60);
+        }
+
+        &:not([disabled]) {
+            cursor: pointer;
+        }
+    }
+
+    textarea {resize: none;}
+    input, textarea, button {
+        @extend %text3;
+    }
+
+    .btn-primary {
+        @extend %text2;
+    }
+
+    autodoc-image-input button {
+        width: 100%;
+    }
+
+    @at-root {
+
+        input, textarea {
+            padding: 1.5rem;
+            background: var(--black-05);
+            border: none;
+            border-radius: 2rem;
+        }
+    
+        textarea {
+            resize: none;
+        }
     }
 }

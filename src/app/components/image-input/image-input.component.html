@@ -1,5 +1,7 @@
 <input type="file" (change)="onChange()" #fileUpload>
 <button 
+    type="button"
+    class="btn btn-regular"
     (click)="fileUpload.click()" 
     [innerHTML]="files?.length && fileIsImage
         ? 'Изменить изображение' 

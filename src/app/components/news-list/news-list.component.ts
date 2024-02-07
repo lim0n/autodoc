@@ -1,8 +1,8 @@
 import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Observable, Subject, filter, take, takeUntil } from 'rxjs';
+import { Observable, Subject, filter, take, takeUntil, tap } from 'rxjs';
 import { IPublication } from '@shared/interfaces';
 import { PlatformService } from '@shared/services/platform.service';
-import { Store, Select } from '@ngxs/store'
+import { Store, Select } from '@ngxs/store';
 import { PublicationsActions } from './state/publications.actions';
 import { PublicationsState } from './state/publications.state';
 
@@ -31,7 +31,9 @@ export class NewsListComponent {
         filter(Boolean),
         takeUntil(this.destroyed)
       )
-      .subscribe((value) => this.pubs = value );
+      .subscribe((value) => {
+        return this.pubs = value
+      } );
 
     if ( !this.pubs?.length ) {
       this._store.dispatch([new PublicationsActions.GetNextPage]);
