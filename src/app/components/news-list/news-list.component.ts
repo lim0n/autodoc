@@ -1,5 +1,16 @@
-import { Component, ElementRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { Observable, Subject, filter, take, takeUntil, tap } from 'rxjs';
+import { 
+  Component, 
+  ElementRef, 
+  ViewChild, 
+  ViewEncapsulation 
+} from '@angular/core';
+import { 
+  Observable, 
+  Subject, 
+  filter, 
+  take, 
+  takeUntil 
+} from 'rxjs';
 import { IPublication } from '@shared/interfaces';
 import { PlatformService } from '@shared/services/platform.service';
 import { Store, Select } from '@ngxs/store';
@@ -19,12 +30,11 @@ export class NewsListComponent {
   @Select(PublicationsState.publications$) publications$!: Observable<IPublication[]>;
   @Select(PublicationsState.pageLoaded$) pageLoaded$!: Observable<number>;
   @ViewChild('anchor') anchor!: ElementRef;
-  pubs: IPublication[] | undefined;
+  pubs!: IPublication[];
   
   constructor (
     private readonly _platform: PlatformService,
-    private readonly _store: Store,
-    private _elementRef: ElementRef
+    private readonly _store: Store
   ) {
     this.publications$
       .pipe(
@@ -32,15 +42,44 @@ export class NewsListComponent {
         takeUntil(this.destroyed)
       )
       .subscribe((value) => {
-        return this.pubs = value
+        this.pubs = value;
       } );
 
-    if ( !this.pubs?.length ) {
-      this._store.dispatch([
-        new PublicationsActions.GetNextPage,
-        new PublicationsActions.GetLocalArticle
-      ]);
-    }
+      // this.pubs?.length 
+      //   ? !this._platform.isServer 
+      //     ? this._store.dispatch([new PublicationsActions.GetNextPage]) 
+      //     : this._store.dispatch([new PublicationsActions.BootstrapLocalArticle, new PublicationsActions.GetNextPage])
+      //   : this._store.dispatch(new PublicationsActions.GetNextPage);
+
+      if (this._platform.isServer) {
+        if ( !this.pubs?.length ) {
+          this._store.dispatch([
+            new PublicationsActions.GetNextPage
+          ]);
+        }
+      } else {
+        if ( !this.pubs?.length ) {
+          this._store.dispatch([
+            new PublicationsActions.BootstrapLocalArticle,
+            new PublicationsActions.GetNextPage
+          ]);
+        }
+      }
+
+    // if (!this._platform.isServer) {
+    //   if ( !this.pubs?.length ) {
+    //     this._store.dispatch([
+    //       new PublicationsActions.BootstrapLocalArticle,
+    //       new PublicationsActions.GetNextPage,
+    //     ]);
+    //   }
+    // } else {
+    //   if ( !this.pubs?.length ) {
+    //     this._store.dispatch([
+    //       new PublicationsActions.GetNextPage
+    //     ]);
+    //   }
+    // }
   }
   
   ngAfterViewInit(): void {

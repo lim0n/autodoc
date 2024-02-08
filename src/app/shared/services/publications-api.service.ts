@@ -18,13 +18,10 @@ export class PublicationsApiService {
 
   constructor(
     private readonly _http: HttpClient,
-    // private _localStorage: Storage,
     private _platform: PlatformService
   ) {
     if (!this._platform.isServer) {
-      console.warn(localStorage.getItem('localNews'));
       this.localNews[1] = JSON.parse( localStorage.getItem('localNews') as string ) as IPublicationsResponse;
-      console.warn(this.localNews[1]);
       if (this.localNews[1] === null) {
         this.localNews[1] = { news: [] };
       }
@@ -49,7 +46,7 @@ export class PublicationsApiService {
     return this.localNews$$;
   }
 
-  getLocalArticle(): Observable<PublicationsPair> {
+  getLocalArticles(): Observable<PublicationsPair> {
     return this.localNews$$;
   }
 }

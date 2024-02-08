@@ -24,15 +24,6 @@ export class AddArticleComponent {
     text: new FormControl('', Validators.required),
     titleImageUrl: new FormControl('', Validators.required)
   });
-  // addArticleModel!: Partial<IPublication>;
-  
-  // toISOString()
-
-  
-
-  // get addArticleFormValue(): Partial<IPublication> {
-  //   return this.addArticleForm.value as Partial<IPublication>;
-  // }
 
   constructor(
     private readonly _store: Store
@@ -42,10 +33,9 @@ export class AddArticleComponent {
     this.closeDialog.emit();
   }
 
-  onFileChanged( payload?: { file?: File, isImage?: boolean} | undefined ): void {
+  onFileChanged( payload?: { file?: File, isImage?: boolean} ): void {
     if (payload) {
       const { file, isImage } = payload;
-      
       if (file && isImage) {
         const reader = new FileReader();
         reader.onload = () => {this.imagePatchValue(reader)}
