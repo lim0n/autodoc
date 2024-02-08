@@ -22,7 +22,9 @@ export class PublicationsApiService {
     private _platform: PlatformService
   ) {
     if (!this._platform.isServer) {
-      this.localNews[1] = localStorage.getItem('localNews') as IPublicationsResponse;
+      console.warn(localStorage.getItem('localNews'));
+      this.localNews[1] = JSON.parse( localStorage.getItem('localNews') as string ) as IPublicationsResponse;
+      console.warn(this.localNews[1]);
       if (this.localNews[1] === null) {
         this.localNews[1] = { news: [] };
       }
@@ -42,6 +44,7 @@ export class PublicationsApiService {
 
   postArticle(publication: IPublication): Observable<PublicationsPair> {
     this.localNews[1].news?.push(publication);
+    localStorage.setItem( 'localNews', JSON.stringify(this.localNews[1]) );
     this.localNews$$.next(this.localNews);
     return this.localNews$$;
   }
