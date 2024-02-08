@@ -53,9 +53,10 @@ export class PublicationsState {
 
   @Action(PublicationsActions.AddChunk)
   addChunk(ctx: StateContext<PublicationsStateModel>, { payload }: PublicationsActions.AddChunk): void {
-    const { pages } = ctx.getState();
-    pages.unshift(payload);
-    ctx.patchState({ pages });
+    const { pages  } = ctx.getState();
+    const localPages = [payload, ...pages];
+    ctx.patchState({pages: localPages});
+    ctx.dispatch(new PublicationsActions.FlattenPages());
   }
 
   @Action(PublicationsActions.PushFromResponse)
@@ -92,8 +93,10 @@ export class PublicationsState {
       )
       .subscribe(response => {
         ctx.patchState({ pageLoaded: pageRequested });
-        ctx.dispatch(new PublicationsActions.PushFromResponse({ ...response, offsetAndCount }));
-        ctx.dispatch(new PublicationsActions.FlattenPages());
+        ctx.dispatch([
+          new PublicationsActions.PushFromResponse({ ...response, offsetAndCount }),
+          new PublicationsActions.FlattenPages()
+        ]);
       })
   }
 
@@ -115,18 +118,14 @@ export class PublicationsState {
       .pipe(
         take(1),
         catchError(error => of(error))
-      ).subscribe(pair => {
-        ctx.dispatch([
-          new PublicationsActions.AddChunk(pair),
-          new PublicationsActions.FlattenPages
-        ]);
-      })
+      )
+      .subscribe(() => ctx.dispatch(new PublicationsActions.FlattenPages))
   }
 
-  @Action(PublicationsActions.GetLocalArticle)
+  @Action(PublicationsActions.BootstrapLocalArticle)
   getLocalArticle(ctx: StateContext<PublicationsStateModel>): void {
     const { pages } = ctx.getState();
-    this._api.getLocalArticle()
+    this._api.getLocalArticles()
       .pipe(
         take(1),
         filter(Boolean),

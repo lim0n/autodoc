@@ -30,7 +30,7 @@ export namespace PublicationsActions {
     constructor(public payload: Partial<IPublication>) { }
   }
 
-  export class GetLocalArticle {
-    static readonly type = '[Publications] Get local article';
+  export class BootstrapLocalArticle {
+    static readonly type = '[Publications] Bootstrap local article';
   }
 }
