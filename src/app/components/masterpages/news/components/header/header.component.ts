@@ -1,5 +1,6 @@
 import { ApplicationRef, Component, ComponentFactoryResolver, Inject, ViewChild, ViewContainerRef, ViewEncapsulation } from '@angular/core';
 import { AddArticleComponent } from '../add-article/add-article.component';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'autodoc-header',
@@ -12,10 +13,13 @@ export class HeaderComponent {
   componentRef: any;
   factory: any;
   @ViewChild('addArticleDialog', { read: ViewContainerRef }) addArticleDialog!: ViewContainerRef;
+  title = this._route.snapshot.data['title'];
 
   constructor(
     @Inject(ComponentFactoryResolver) private resolver: ComponentFactoryResolver,
-    private appRef: ApplicationRef
+    private appRef: ApplicationRef,
+    private _route: ActivatedRoute
+
   ) { }
 
   createDialogComponent(): void {
